@@ -1,0 +1,102 @@
+<div id="GMaps" style="height:320px;" data-api-key="AIzaSyA91fsNY-7WkPq78wi2kZlpPS1_v_c7gmA"></div>
+<script type="text/javascript">
+(function (X) {
+	var map$ = $("#GMaps"),
+		iKey = "initGM" + (new Date()).getTime();
+
+	function inRange(la,lo){
+		return (-90<=la)&&(la<=90)&&(-180<=lo)&&(lo<=180);
+	}
+	function initGMap() {
+		var myLatlng = new google.maps.LatLng(35.6811673,139.7648629),
+			mapOptions = {
+				zoom: 16,
+				center: myLatlng
+			},
+			map = new google.maps.Map(document.getElementById("GMaps"), mapOptions),
+			markers = [],
+			bounds,
+			country;
+
+		function clearMarkers() {
+			X.console.debug("clearing markers");
+			$.each(markers, function(ignore, marker) {
+				marker.setMap(null);
+			});
+			markers = [];
+			bounds = new google.maps.LatLngBounds();
+		}
+		function reZoom() {
+			if (markers&&markers.length) {
+				google.maps.event.addListener(map, 'zoom_changed', function () {
+					zoomChangeBoundsListener = 
+						google.maps.event.addListener(map, 'bounds_changed', function(event) {
+							if (this.getZoom() > 10 && this.initialZoom == true) {
+								// Change max/min zoom here
+								this.setZoom(10);
+								this.initialZoom = false;
+							}
+						google.maps.event.removeListener(zoomChangeBoundsListener);
+					});
+				});
+				map.initialZoom = true;
+				map.fitBounds(bounds);
+			}else{
+				countrySearch(null,country||"Germany");
+			}
+		}
+		function zipSearch(e,data){
+			clearMarkers();
+			$.each(data||[],function(i,v){
+				inRange(v.latitude,v.longitude) && markers.push(createMarker(v));
+			});
+			reZoom();
+		}
+		function countrySearch(e,data){
+			var geocoder=new google.maps.Geocoder();
+			country=data;
+			geocoder.geocode({'address':country},function(results,status){
+				if (status===google.maps.GeocoderStatus.OK){
+					map.setCenter(results[0].geometry.location);
+					map.fitBounds(results[0].geometry.bounds);
+				}else{
+					X.console.error("Geocode unsuccessful. Reason: "+status);
+				}
+			});
+		}
+//		X.require(["messaging"], function () {
+			X.M.subscribe("xcc.zipsearch.found", zipSearch);
+			X.M.subscribe("xcc.zipsearch.country", countrySearch);
+//		});
+
+		function createMarker(zip) {
+			var zipLatlng = new google.maps.LatLng(zip.latitude,zip.longitude),
+				marker = new google.maps.Marker({
+					position:zipLatlng,
+					title:zip["place name"]+", "+zip.state
+				});
+			X.console.debug("setting new marker for: %s", zip["place name"] + ", " + zip.state, zip);
+			debugger;
+			marker.setMap(map);
+			if (bounds) {
+				bounds.extend(zipLatlng);
+			}
+			return marker;
+		}
+		if (navigator.geolocation) {
+			X.console.debug("geolocation");
+			navigator.geolocation.getCurrentPosition(function (position) {
+				var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				map.setCenter(initialLocation);
+			});
+		}
+	}
+
+	window[iKey] = function () {
+		delete window[iKey];
+		initGMap();
+	}
+	$.getScript("//maps.googleapis.com/maps/api/js?callback="+iKey+"&key="+map$.data().apiKey);
+}(XCC));
+
+</script>
