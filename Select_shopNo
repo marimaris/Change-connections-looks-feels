@@ -52,10 +52,10 @@ widgetB$.blink(null, 500, {"background-color": "green"});
 	}
 	if (results$.length) {
 		results$.empty();
-		results$.append("<br><br><strong style='color:yellowgreen;'>Customer " + Customer     + " selected!</strong>", table$);
+		results$.append("<br><br><strong style='color:yellowgreen;'>営業店 " + Customer     + " を選択しました!</strong>", table$);
 	} else {
 		results$ = $("<div rel='results'>");
-		results$.append("<br><br><strong style='color:yellowgreen;'>Customer " + Customer     + " selected!</strong>", table$);
+		results$.append("<br><br><strong style='color:yellowgreen;'>営業店 " + Customer     + " を選択しました!</strong>", table$);
 		widgetB$.append(results$);
 	}
 	XCC.M.trigger("xcc.zipsearch.country", location$.text());
