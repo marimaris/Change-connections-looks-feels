@@ -1,0 +1,30 @@
+{
+  "extensions": [
+    {
+      "path": "com.ibm.navbar.order.95000",
+      "application": "ICEC",
+      "payload": {
+        "link": "/xcc/cloud?page=intranet-top",
+        "icon": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Glossy_3d_blue_chat.png",
+        "tooltip": "ICEC"
+      },
+      "name": "ICEC-LAB",
+      "description": "ICEC Lab Site",
+      "type": "com.ibm.action.link",
+      "title": "ICEC-LAB"
+    }
+  ],
+  "payload": {
+    "pre-migration": {
+      "migration-type": "navbar",
+      "migration-date": "1492920892732"
+    }
+  },
+  "translations": {},
+  "name": "ICEC-LAB",
+  "description": "ICEC Lab Site",
+  "services": [
+    "TopNavigationBar"
+  ],
+  "title": "ICEC-LAB"
+}
