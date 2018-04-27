@@ -10,7 +10,6 @@
 $("#customer_select").on("change", function(e) {
 	var Customer = $(this).find("option:selected").text().split(" ")[1], 
 		widgetB$ = $("div[data-wname=WidgetB]").find(".xccClipping"),
-		widgetC$ = $("div[data-wname=WidgetB]").find(".xccClipping"),
 		results$ =widgetB$.find("div[rel=results]")
 		table$ = $(['<table class="table table-striped"><thead><tr><th>店名</th>',
 			'<th>タイプ</th>',
@@ -27,7 +26,6 @@ $("#customer_select").on("change", function(e) {
 		location$ = table$.find("[rel=Location]"),
 		jobtitle$ = table$.find("[rel=Jobtitle]");
 widgetB$.blink(null, 500, {"background-color": "green"});
-	widgetC$.blink(null, 500, {"background-color": "pink"});
 	switch(Customer) {
 		case "4711":
 			birthday$.text("1999年5月12日");
@@ -59,7 +57,6 @@ widgetB$.blink(null, 500, {"background-color": "green"});
 		results$ = $("<div rel='results'>");
 		results$.append("<br><br><strong style='color:yellowgreen;'>Customer " + Customer     + " selected!</strong>", table$);
 		widgetB$.append(results$);
-		widgetC$.append(results$);
 	}
 	XCC.M.trigger("xcc.zipsearch.country", location$.text());
 });
