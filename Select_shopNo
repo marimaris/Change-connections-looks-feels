@@ -1,0 +1,66 @@
+営業店を選んでください
+<br><br><br>
+<select name="Customer" id="customer_select" class="form-control">
+<option style="display: none;" value="-">リストから選択して下さい</option>
+<option value="Customer 4711">箱崎支店 4711</option>
+<option value="Customer 4811">大阪支店 4811</option>
+<option value="Customer 4911">名古屋支店 4911</option>
+</select>
+<script>
+$("#customer_select").on("change", function(e) {
+	var Customer = $(this).find("option:selected").text().split(" ")[1], 
+		widgetB$ = $("div[data-wname=WidgetB]").find(".xccClipping"),
+		widgetC$ = $("div[data-wname=WidgetB]").find(".xccClipping"),
+		results$ =widgetB$.find("div[rel=results]")
+		table$ = $(['<table class="table table-striped"><thead><tr><th>店名</th>',
+			'<th>タイプ</th>',
+			'<th>開店日</th>',
+			'<th>店舗住所</th>',
+			'</tr></thead><tbody>',
+			'<tr><td rel="name"></td>',
+			'<td rel="Jobtitle"></td>',
+			'<td rel="Room"></td>',
+			'<td rel="location"></td>',
+			'</tr></tbody></table>'].join("")),
+		birthday$ = table$.find("[rel=Room]"),
+		name$ = table$.find("[rel=name]"),
+		location$ = table$.find("[rel=Location]"),
+		jobtitle$ = table$.find("[rel=Jobtitle]");
+widgetB$.blink(null, 500, {"background-color": "green"});
+	widgetC$.blink(null, 500, {"background-color": "pink"});
+	switch(Customer) {
+		case "4711":
+			birthday$.text("1999年5月12日");
+			name$.text("箱崎支店");
+			location$.text("東京都中央区日本橋箱崎町");
+			jobtitle$.text('Super');
+			break;
+		case "4811":
+			birthday$.text("2008年3月1日");
+			name$.text("大阪フェスティバルタワー店");
+			location$.text("大阪市北区中之島2丁目");
+			jobtitle$.text('Regular');
+			break;
+		case "4911":
+			birthday$.text("1960年8月1日");
+			name$.text("名古屋支店");
+			location$.text("愛知県名古屋市中村区");
+			jobtitle$.text('Super');
+			break;
+		default:
+			birthday$.text("1985年4月1日");
+			name$.text("福岡");
+			jobtitle$.text('Regular');
+	}
+	if (results$.length) {
+		results$.empty();
+		results$.append("<br><br><strong style='color:yellowgreen;'>Customer " + Customer     + " selected!</strong>", table$);
+	} else {
+		results$ = $("<div rel='results'>");
+		results$.append("<br><br><strong style='color:yellowgreen;'>Customer " + Customer     + " selected!</strong>", table$);
+		widgetB$.append(results$);
+		widgetC$.append(results$);
+	}
+	XCC.M.trigger("xcc.zipsearch.country", location$.text());
+});
+</script>
